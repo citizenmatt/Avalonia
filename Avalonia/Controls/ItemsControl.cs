@@ -27,6 +27,13 @@ namespace Avalonia.Controls
                 typeof(ItemsControl),
                 new PropertyMetadata(null, new PropertyChangedCallback(DisplayMemberPathChanged)));
 
+        public static readonly DependencyProperty ItemContainerStyleProperty =
+            DependencyProperty.Register(
+                "ItemContainerStyle",
+                typeof(Style),
+                typeof(ComboBox),
+                new PropertyMetadata(ItemContainerStyleChanged));
+
         public static readonly DependencyProperty ItemsProperty =
             DependencyProperty.Register(
                 "Items", 
@@ -135,6 +142,12 @@ namespace Avalonia.Controls
         internal Panel Panel
         {
             get { return this.itemsPresenter == null ? null : this.itemsPresenter.Child; }
+        }
+
+        protected virtual void OnItemContainerStyleChanged(
+            Style oldItemContainerStyle,
+            Style newItemContainerStyle)
+        {
         }
 
         private IWeakListener CollectionListener
@@ -370,6 +383,11 @@ namespace Avalonia.Controls
             ((ItemsControl)o).OnDisplayMemberPathChanged(
                 e.OldValue as string,
                 e.NewValue as string);
+        }
+
+        private static void ItemContainerStyleChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
+        {
+            ((ItemsControl)sender).OnItemContainerStyleChanged((Style)e.OldValue, (Style)e.NewValue);
         }
 
         private static void ItemTemplateChanged(DependencyObject sender, DependencyPropertyChangedEventArgs e)
